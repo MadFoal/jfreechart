@@ -39,7 +39,7 @@ package org.jfree.chart;
 /**
  * A chart element (used to support a visitor pattern for traversing all the
  * elements in a chart).
- */
+  */
 public interface ChartElement {
     
     /**
