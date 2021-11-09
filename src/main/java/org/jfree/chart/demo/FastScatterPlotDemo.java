@@ -63,10 +63,10 @@ public class FastScatterPlotDemo extends ApplicationFrame {
     private void populateData() {
         for (int i = 0; i < data[0].length; i++) {
             //float x = (float) i + 100;
-            float  x = (float) Math.random();
+            float  x = 30 + 5*(float) Math.random();
             data[0][i] = x;
            // data[1][i] = 100 + (float) Math.random() * COUNT;
-            data[1][i] =  (float) Math.random();
+            data[1][i] =  30 + 5*(float) Math.random();
         }
     }
 
@@ -80,5 +80,6 @@ public class FastScatterPlotDemo extends ApplicationFrame {
         demo.pack();
         UIUtils.centerFrameOnScreen(demo);
         demo.setVisible(true);
+
       }
 }

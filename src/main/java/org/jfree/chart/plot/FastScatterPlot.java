@@ -37,15 +37,7 @@
 
 package org.jfree.chart.plot;
 
-import java.awt.AlphaComposite;
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Composite;
-import java.awt.Graphics2D;
-import java.awt.Paint;
-import java.awt.RenderingHints;
-import java.awt.Shape;
-import java.awt.Stroke;
+import java.awt.*;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
@@ -573,13 +565,20 @@ public class FastScatterPlot extends Plot implements ValueAxisPlot, Pannable,
                 float x = this.data[0][i];
                 float y = this.data[1][i];
 
-                //int transX = (int) (xx + ww * (x - domainMin) / domainLength);
-                //int transY = (int) (yy - hh * (y - rangeMin) / rangeLength);
+
                 int transX = (int) this.domainAxis.valueToJava2D(x, dataArea,
                         RectangleEdge.BOTTOM);
                 int transY = (int) this.rangeAxis.valueToJava2D(y, dataArea,
                         RectangleEdge.LEFT);
-                g2.fillRect(transX, transY, 1, 1);
+                //g2.fillRect(transX, transY, 1, 1);
+                g2.fillRect(transX, transY, 10,10);
+
+                //int[]transX_array = new int[]{transX-10, transX, transX+10, transX};
+                //int[] transY_array = new int[]{transY-10, transY, transY, transY-10};
+
+                //g2.fillPolygon(transX_array,transY_array,4);
+                //g2.setPaint(Color.RED);
+
             }
         }
     }
@@ -670,7 +669,7 @@ public class FastScatterPlot extends Plot implements ValueAxisPlot, Pannable,
      *
      * @return The range.
      */
-    private Range calculateXDataRange(float[][] data) {
+    public Range calculateXDataRange(float[][] data) {
 
         Range result = null;
 
@@ -702,7 +701,7 @@ public class FastScatterPlot extends Plot implements ValueAxisPlot, Pannable,
      *
      * @return The range.
      */
-    private Range calculateYDataRange(float[][] data) {
+    public Range calculateYDataRange(float[][] data) {
 
         Range result = null;
         if (data != null) {
