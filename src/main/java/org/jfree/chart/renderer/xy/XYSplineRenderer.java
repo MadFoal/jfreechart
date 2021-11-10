@@ -128,7 +128,12 @@ public class XYSplineRenderer extends XYLineAndShapeRenderer {
     private FillType fillType;
 
     private GradientPaintTransformer gradientPaintTransformer;
-    
+
+    /**
+     *  A tolerance for absolute difference of y_val between neighboring points
+     *  if ABS(point1.y - point2.y) <= diffYTol, no spline interpolation
+     */
+    private final double diffYTol = 1e-6;
     /**
      * Creates a new instance with the precision attribute defaulting to 5 
      * and no fill of the area 'under' the spline.
@@ -368,6 +373,8 @@ public class XYSplineRenderer extends XYLineAndShapeRenderer {
                     }
                     s.seriesPath.lineTo(cp1.getX(), cp1.getY());
                 } else {
+
+
                     // construct spline
                     int np = s.points.size(); // number of points
                     float[] d = new float[np]; // Newton form coefficients
@@ -407,16 +414,26 @@ public class XYSplineRenderer extends XYLineAndShapeRenderer {
                     oldy = d[0];
                     for (int i = 1; i <= np - 1; i++) {
                         // loop over intervals between nodes
-                        for (int j = 1; j <= this.precision; j++) {
-                            t1 = (h[i] * j) / this.precision;
-                            t2 = h[i] - t1;
-                            y = ((-a[i - 1] / 6 * (t2 + h[i]) * t1 + d[i - 1])
-                                    * t2 + (-a[i] / 6 * (t1 + h[i]) * t2
-                                    + d[i]) * t1) / h[i];
-                            t = x[i - 1] + t1;
-                            s.seriesPath.lineTo(t, y);
+                        // If two neighboring points are close, no spline interpolation
+                        if (Math.abs(d[i-1]-d[i])>diffYTol){
+                            for (int j = 1; j <= this.precision; j++) {
+                                t1 = (h[i] * j) / this.precision;
+                                t2 = h[i] - t1;
+                                y = ((-a[i - 1] / 6 * (t2 + h[i]) * t1 + d[i - 1])
+                                        * t2 + (-a[i] / 6 * (t1 + h[i]) * t2
+                                        + d[i]) * t1) / h[i];
+                                t = x[i - 1] + t1;
+                                s.seriesPath.lineTo(t, y);
+                                if (this.fillType != FillType.NONE) {
+                                    s.fillArea.lineTo(t, y);
+                                }
+                            }
+                        }
+                        else{
+                            s.seriesPath.lineTo(x[i], d[i]);
                             if (this.fillType != FillType.NONE) {
-                                s.fillArea.lineTo(t, y);
+                                s.fillArea.lineTo(x[i], d[i]);
+                                s.fillArea.closePath();
                             }
                         }
                     }
