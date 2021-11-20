@@ -36,35 +36,22 @@
 
 package org.jfree.chart.axis;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import org.junit.jupiter.api.Test;
 
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Calendar;
+import java.text.DateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.Locale;
+
 import java.util.TimeZone;
 
-import org.jfree.chart.TestUtils;
 import org.jfree.chart.api.RectangleEdge;
 
-import org.jfree.data.time.DateRange;
 import org.jfree.data.time.Day;
 import org.jfree.data.time.Hour;
-import org.jfree.data.time.Millisecond;
-import org.jfree.data.time.Minute;
-import org.jfree.data.time.Month;
-import org.jfree.data.time.Second;
-import org.jfree.data.time.Year;
 
 /**
  * Tests for the {@link DateAxis} class.
@@ -109,29 +96,102 @@ public class DateDaylightSavingTest {
         Day startD1 = new Day(7, 11, 2021);
     }
 
+
+//refreshTicksHorizontal
     @Test
     public void testPreviousStandardDateHourA() {
         System.out.println("**testPreviousStandardDateHourA");
         DateAxisTest.MyDateAxis axis = new DateAxisTest.MyDateAxis("Hour");
-        //Hour h0 = new Hour(12, 1, 4, 2007);
-        Hour h0 = new Hour(12,7, 11, 2021);
-        Hour h1 = new Hour(13, 7, 11, 2021);
-        Date d0 = new Date(h0.getFirstMillisecond());
-        Date end = new Date(h1.getLastMillisecond());
-
-        System.out.println("**testPreviousStandardDateHourA end: " + end);
+        Hour h0 = new Hour(3,2, 11, 2021);
+        Hour h1 = new Hour(1, 7, 11, 2021);
+        Hour h2 = new Hour(2, 7, 11, 2021);
+        Hour h3 = new Hour(3, 7, 11, 2021);
+        Hour h4 = new Hour(4, 7, 11, 2021);
         DateTickUnit unit = new DateTickUnit(DateTickUnitType.HOUR, 1);
         axis.setTickUnit(unit);
 
         // START: check d0 and d1
         axis.setTickMarkPosition(DateTickMarkPosition.START);
+        System.out.println("***h0***");
+        printInfo(h0);
+        System.out.println("***h1***");
+        printInfo(h1);
+        System.out.println("***h2***");
+        printInfo(h2);
+        System.out.println("***h3***");
+        printInfo(h3);
+        System.out.println("***h4***");
+        printInfo(h4);
+    }
 
-        axis.setRange(d0, end);
-        Date psd = axis.previousStandardDate(d0, unit);
-        Date nsd = unit.addToDate(psd, TimeZone.getDefault());
-        System.out.println("**nsd: " + nsd);
-        assertTrue(psd.getTime() < d0.getTime());
-        assertTrue(nsd.getTime() >= d0.getTime());
+    private void printInfo(Hour h1){
+      //  System.out.println("***printInfo***");
+        Date d1 = new Date(h1.getFirstMillisecond());
+        System.out.println("***entered date: " + d1);
+        Date end = new Date(h1.getLastMillisecond());
+        DateAxisTest.MyDateAxis axis = new DateAxisTest.MyDateAxis("Hour");
+        DateTickUnit unit = new DateTickUnit(DateTickUnitType.HOUR, 1);
+        axis.setTickUnit(unit);
+        axis.setRange(d1, end);
+
+        axis.setTickUnit(unit);
+        Date psd = axis.previousStandardDate(d1, unit);
+        Date nextsd = axis.nextStandardDate(d1, unit);
+     //   Date nsd = unit.addToDate(psd, TimeZone.getDefault());
+        System.out.println("*****prev: " + psd);
+        System.out.println("***** next: " + nextsd);
+    }
+
+    //runs both  protected AxisState drawTickMarksAndLabels ublic void testDrawWithNullInfo2() {
+    @Test
+    public void standardDateTest() {
+        DateAxis axis = new DateAxis("Test Axis");
+
+        Hour h0 = new Hour(0,7, 11, 2021);
+        Hour h1 = new Hour(1, 7, 11, 2021);
+        Hour h2 = new Hour(2, 7, 11, 2021);
+        Hour h3 = new Hour(3, 7, 11, 2021);
+        Hour h4 = new Hour(4, 7, 11, 2021);
+        Date d0 = new Date(h0.getFirstMillisecond());
+        Date d1 = new Date(h1.getFirstMillisecond());
+        Date d2 = new Date(h2.getFirstMillisecond());
+        Date d3 = new Date(h3.getFirstMillisecond());
+        Date d4 = new Date(h4.getFirstMillisecond());
+
+        DateTickUnit t1 = new DateTickUnit(DateTickUnitType.DAY, 1);
+        Date result = axis.nextStandardDate(d2, t1);
+       System.out.println("**result: " + result);
+    }
+
+    @Test
+    public void del(){
+        System.out.println("*****prev: hi");
+        TimeZone zone = TimeZone.getTimeZone("America/New_York");
+        DateFormat format = DateFormat.getDateTimeInstance();
+        format.setTimeZone(zone);
+
+        Hour h0 = new Hour(0,7, 11, 2021);
+        Hour h1 = new Hour(1, 7, 11, 2021);
+        Hour h2 = new Hour(2, 7, 11, 2021);
+        Hour h3 = new Hour(3, 7, 11, 2021);
+        Hour h4 = new Hour(4, 7, 11, 2021);
+        Date d0 = new Date(h0.getFirstMillisecond());
+        Date d1 = new Date(h1.getFirstMillisecond());
+        Date d2 = new Date(h2.getFirstMillisecond());
+        Date d3 = new Date(h3.getFirstMillisecond());
+        Date d4 = new Date(h4.getFirstMillisecond());
+        String x = format.format(d0);
+        System.out.println(format.format(new Date()));
+        System.out.println("*****d0");
+        System.out.println(format.format(d0));
+        System.out.println("*****d1");
+        System.out.println(format.format(d1));
+        System.out.println("*****d2");
+        System.out.println(format.format(d2));
+        System.out.println("*****d3");
+        System.out.println(format.format(d3));
+        System.out.println("*****d1");
+        System.out.println(format.format(d4));
     }
 
     /**
@@ -139,16 +199,21 @@ public class DateDaylightSavingTest {
      */
     @Test
     public void testBug2201869() {
-        TimeZone tz = TimeZone.getTimeZone("GMT");
-        GregorianCalendar c = new GregorianCalendar(tz, Locale.UK);
-        DateAxis axis = new DateAxis("Date", tz, Locale.UK);
-        SimpleDateFormat sdf = new SimpleDateFormat("d-MMM-yyyy", Locale.UK);
-        sdf.setCalendar(c);
-        axis.setTickUnit(new DateTickUnit(DateTickUnitType.MONTH, 1, sdf));
-        Day d1 = new Day(1, 3, 2008);
+        // uses next standard date
+        GregorianCalendar c = new GregorianCalendar();
+        DateAxis axis = new DateAxis();
+       // SimpleDateFormat sdf = new SimpleDateFormat("d-MMM-yyyy", Locale.UK);
+        //sdf.setCalendar(c);
+       // axis.setTickUnit(new DateTickUnit(DateTickUnitType.MONTH, 1, sdf));
+        Hour h2 = new Hour(2, 7, 11, 2021);
+        Hour h3 = new Hour(3, 7, 11, 2021);
+        //Date d0 = new Date(h2.getFirstMillisecond());
+      //  Date d1 = new Date(h3.getFirstMillisecond());
+        Day d1 = new Day(7, 11, 2021);
         d1.peg(c);
-        Day d2 = new Day(30, 6, 2008);
+        Day d2 = new Day(7, 11, 2021);
         d2.peg(c);
+
         axis.setRange(d1.getStart(), d2.getEnd());
         BufferedImage image = new BufferedImage(200, 100,
                 BufferedImage.TYPE_INT_ARGB);
@@ -157,49 +222,29 @@ public class DateDaylightSavingTest {
         axis.setTickMarkPosition(DateTickMarkPosition.END);
         List<? extends Tick> ticks = axis.refreshTicks(g2, new AxisState(), area,
                 RectangleEdge.BOTTOM);
-        assertEquals(3, ticks.size());
-        DateTick t1 = (DateTick) ticks.get(0);
-        assertEquals("31-Mar-2008", t1.getText());
-        DateTick t2 = (DateTick) ticks.get(1);
-        assertEquals("30-Apr-2008", t2.getText());
-        DateTick t3 = (DateTick) ticks.get(2);
-        assertEquals("31-May-2008", t3.getText());
-
-        // now repeat for a vertical axis
-        ticks = axis.refreshTicks(g2, new AxisState(), area,
-                RectangleEdge.LEFT);
-        assertEquals(3, ticks.size());
-        t1 = (DateTick) ticks.get(0);
-        assertEquals("31-Mar-2008", t1.getText());
-        t2 = (DateTick) ticks.get(1);
-        assertEquals("30-Apr-2008", t2.getText());
-        t3 = (DateTick) ticks.get(2);
-        assertEquals("31-May-2008", t3.getText());
+        System.out.println("**result ticks: " + ticks);
     }
 
-/*
-    Hour h1 = new Hour(13, 7, 11, 2021);
-        // five dates to check...
-        Date d0 = new Date(h0.getFirstMillisecond());
-        Date d1 = new Date(h0.getFirstMillisecond() + 500L);
-        Date d2 = new Date(h0.getMiddleMillisecond());
-        Date d3 = new Date(h0.getMiddleMillisecond() + 500L);
-        Date d4 = new Date(h0.getLastMillisecond());
-        System.out.println("**d4: " + d4);
-        Date end = new Date(h1.getLastMillisecond());
-        System.out.println("**testPreviousStandardDateHourA end: " + end);
 
-        DateTickUnit unit = new DateTickUnit(DateTickUnitType.HOUR, 1);
-        axis.setTickUnit(unit);
-
-        // START: check d0 and d1
-        axis.setTickMarkPosition(DateTickMarkPosition.START);
-
-        axis.setRange(d0, end);
-        Date psd = axis.previousStandardDate(d0, unit);
-        Date nsd = unit.addToDate(psd, TimeZone.getDefault());
-        System.out.println("**nsd: " + nsd);
-        assertTrue(psd.getTime() < d0.getTime());
-        assertTrue(nsd.getTime() >= d0.getTime());
- */
 }
+
+/*
+
+
+    protected List refreshTicksHorizontal(Graphics2D g2, Rectangle2D dataArea, RectangleEdge edge) {
+
+        List result = new java.util.ArrayList();
+
+        Font tickLabelFont = getTickLabelFont();
+        g2.setFont(tickLabelFont);
+
+        if (isAutoTickUnitSelection()) {
+            selectAutoTickUnit(g2, dataArea, edge);
+        }
+
+        DateTickUnit unit = getTickUnit();
+        Date tickDate = calculateLowestVisibleTickValue(unit);
+        Date upperDate = getMaximumDate();
+    }
+
+ */

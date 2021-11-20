@@ -1115,7 +1115,8 @@ public class DateAxisTest {
     /**
      * A test to reproduce bug 2201869.
      */
-    @Test
+   // @Test
+    // nextStandardDate
     public void testBug2201869() {
         TimeZone tz = TimeZone.getTimeZone("GMT");
         GregorianCalendar c = new GregorianCalendar(tz, Locale.UK);
@@ -1159,6 +1160,7 @@ public class DateAxisTest {
      * A test for bug 3484403 (SourceForge 
      * https://sourceforge.net/p/jfreechart/bugs/1078/).
      */
+    /// refreshTicksHorizontal
     @Test
     public void testBug3484403() {
 

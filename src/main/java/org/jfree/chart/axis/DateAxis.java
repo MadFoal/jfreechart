@@ -53,6 +53,8 @@ import java.awt.geom.Rectangle2D;
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -105,6 +107,8 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
 
     /** The current tick unit. */
     private DateTickUnit tickUnit;
+    public boolean runsNext = false;
+    public boolean runsPrevious = false;
 
     /** The override date format. */
     private DateFormat dateFormatOverride;
@@ -775,7 +779,13 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
      * @return The previous "standard" date.
      */
     protected Date previousStandardDate(Date date, DateTickUnit unit) {
-        System.out.println("**previousStandardDate(): " +date);
+       // System.out.println("**previousStandardDate(): " +date);
+        if(runsNext && runsPrevious) {
+     //       System.out.println("**RUNS BOTH <-0------Prev---!!");
+            runsPrevious = false;
+            runsNext = false;
+        }
+        runsPrevious = true;
         int milliseconds;
         int seconds;
         int minutes;
@@ -846,9 +856,11 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
             }
             calendar.clear(Calendar.MILLISECOND);
             calendar.set(years, months, days, hours, value, seconds);
-            System.out.println("***line 849 cal: " + calendar.getTime() );
+           // System.out.println("***line 849 cal: " + calendar.getTime() );
             Date d0 = calendar.getTime();
             if (d0.getTime() >= date.getTime()) {
+                ZoneId z = this.timeZone.toZoneId() ;
+
                 calendar.set(Calendar.MINUTE, value - count);
                 d0 = calendar.getTime();
             }
@@ -872,11 +884,14 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
             }
             calendar.clear(Calendar.MILLISECOND);
             calendar.set(years, months, days, value, minutes, seconds);
-            System.out.println("**calendar getWeekYear: " + calendar.getWeekYear() + " time : " + calendar.getTime());
+         //   System.out.println("**calendar getWeekYear: " + calendar.getWeekYear() + " time : " + calendar.getTime());
             Date d1 = calendar.getTime();
             if (d1.getTime() >= date.getTime()) {
                 calendar.set(Calendar.HOUR_OF_DAY, value - count);
                 d1 = calendar.getTime();
+
+                //ZonedDateTime.ofInstant()
+                //ZonedDateTime a = ZonedDateTime.of(years, months, days, value, minutes, seconds);
             }
             return d1;
         }
@@ -894,7 +909,7 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
             }
             calendar.clear(Calendar.MILLISECOND);
             calendar.set(years, months, value, hours, 0, 0);
-            System.out.println("***line 897 cal: " + calendar.getTime() );
+           // System.out.println("***line 897 cal: " + calendar.getTime() );
             // long result = calendar.getTimeInMillis();
                 // won't work with JDK 1.3
             Date d2 = calendar.getTime();
@@ -909,7 +924,7 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
             years = calendar.get(Calendar.YEAR);
             calendar.clear(Calendar.MILLISECOND);
             calendar.set(years, value, 1, 0, 0, 0);
-            System.out.println("***line 912 cal: " + calendar.getTime() );
+         //   System.out.println("***line 912 cal: " + calendar.getTime() );
             Month month = new Month(calendar.getTime(), this.timeZone,
                     this.locale);
             Date standardDate = calculateDateForPosition(
@@ -987,12 +1002,19 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
      *
      * @return The next "standard" date.
      */
-    protected Date nextStandardDate(Date date, DateTickUnit unit) {
-        System.out.println("**nextStandardDate");
+    public Date nextStandardDate(Date date, DateTickUnit unit) {
+   //     System.out.println("**unit-->: " +unit);
         Date previous = previousStandardDate(date, unit);
         Calendar calendar = Calendar.getInstance(this.timeZone, this.locale);
         calendar.setTime(previous);
         calendar.add(unit.getCalendarField(), unit.getMultiple());
+    //    System.out.println("**nextStandardDate: " + calendar.getTime());
+        if(runsNext && runsPrevious) {
+       //     System.out.println("**RUNS BOTH <-0---------!!");
+            runsPrevious = false;
+            runsNext = false;
+        }
+        runsNext = true;
         return calendar.getTime();
     }
 
@@ -1454,7 +1476,7 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
      */
     protected List<? extends Tick> refreshTicksHorizontal(Graphics2D g2,
                 Rectangle2D dataArea, RectangleEdge edge) {
-
+        System.out.println("***refreshTicksHorizontal");
         List<DateTick> result = new ArrayList<>();
 
         Font tickLabelFont = getTickLabelFont();

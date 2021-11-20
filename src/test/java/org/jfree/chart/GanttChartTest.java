@@ -82,6 +82,7 @@ public class GanttChartTest  {
      * no exceptions are thrown (a problem that was occurring at one point).
      */
     @Test
+    // runs nextStandardDate
     public void testDrawWithNullInfo() {
         try {
             BufferedImage image = new BufferedImage(200 , 100,
@@ -100,6 +101,7 @@ public class GanttChartTest  {
      * Draws the chart with a {@code null} info object to make sure that
      * no exceptions are thrown (a problem that was occurring at one point).
      */
+    // runs both
     @Test
     public void testDrawWithNullInfo2() {
         JFreeChart chart = createGanttChart();

@@ -78,6 +78,7 @@ public class TimeSeriesChartTest {
      * Draws the chart with a null info object to make sure that no exceptions
      * are thrown (a problem that was occurring at one point).
      */
+    // runs nextStandardDate
     @Test
     public void testDrawWithNullInfo() {
         try {
