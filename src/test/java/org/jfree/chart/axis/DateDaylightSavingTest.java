@@ -80,14 +80,13 @@ public class DateDaylightSavingTest {
 
         // Displaying the time zone
 
-        System.out.println(timeobj);
+        //System.out.println(timeobj);
         // Verifying daylight
         boolean bool_daylight
                 = timeobj.observesDaylightTime();
 
         // Checking the value of day light
-        System.out.println("The result is: "
-                + bool_daylight);
+        //System.out.println("The result is: "+ bool_daylight);
 
     }
 
@@ -100,7 +99,7 @@ public class DateDaylightSavingTest {
 //refreshTicksHorizontal
     @Test
     public void testPreviousStandardDateHourA() {
-        System.out.println("**testPreviousStandardDateHourA");
+        //System.out.println("**testPreviousStandardDateHourA");
         DateAxisTest.MyDateAxis axis = new DateAxisTest.MyDateAxis("Hour");
         Hour h0 = new Hour(3,2, 11, 2021);
         Hour h1 = new Hour(1, 7, 11, 2021);
@@ -112,22 +111,22 @@ public class DateDaylightSavingTest {
 
         // START: check d0 and d1
         axis.setTickMarkPosition(DateTickMarkPosition.START);
-        System.out.println("***h0***");
+        //System.out.println("***h0***");
         printInfo(h0);
-        System.out.println("***h1***");
+        //System.out.println("***h1***");
         printInfo(h1);
-        System.out.println("***h2***");
+        //System.out.println("***h2***");
         printInfo(h2);
-        System.out.println("***h3***");
+        //System.out.println("***h3***");
         printInfo(h3);
-        System.out.println("***h4***");
+        //System.out.println("***h4***");
         printInfo(h4);
     }
 
     private void printInfo(Hour h1){
-      //  System.out.println("***printInfo***");
+      //  //System.out.println("***printInfo***");
         Date d1 = new Date(h1.getFirstMillisecond());
-        System.out.println("***entered date: " + d1);
+        //System.out.println("***entered date: " + d1);
         Date end = new Date(h1.getLastMillisecond());
         DateAxisTest.MyDateAxis axis = new DateAxisTest.MyDateAxis("Hour");
         DateTickUnit unit = new DateTickUnit(DateTickUnitType.HOUR, 1);
@@ -138,8 +137,8 @@ public class DateDaylightSavingTest {
         Date psd = axis.previousStandardDate(d1, unit);
         Date nextsd = axis.nextStandardDate(d1, unit);
      //   Date nsd = unit.addToDate(psd, TimeZone.getDefault());
-        System.out.println("*****prev: " + psd);
-        System.out.println("***** next: " + nextsd);
+        //System.out.println("*****prev: " + psd);
+        //System.out.println("***** next: " + nextsd);
     }
 
     //runs both  protected AxisState drawTickMarksAndLabels ublic void testDrawWithNullInfo2() {
@@ -160,12 +159,12 @@ public class DateDaylightSavingTest {
 
         DateTickUnit t1 = new DateTickUnit(DateTickUnitType.DAY, 1);
         Date result = axis.nextStandardDate(d2, t1);
-       System.out.println("**result: " + result);
+       //System.out.println("**result: " + result);
     }
 
     @Test
     public void del(){
-        System.out.println("*****prev: hi");
+        //System.out.println("*****prev: hi");
         TimeZone zone = TimeZone.getTimeZone("America/New_York");
         DateFormat format = DateFormat.getDateTimeInstance();
         format.setTimeZone(zone);
@@ -181,17 +180,17 @@ public class DateDaylightSavingTest {
         Date d3 = new Date(h3.getFirstMillisecond());
         Date d4 = new Date(h4.getFirstMillisecond());
         String x = format.format(d0);
-        System.out.println(format.format(new Date()));
-        System.out.println("*****d0");
-        System.out.println(format.format(d0));
-        System.out.println("*****d1");
-        System.out.println(format.format(d1));
-        System.out.println("*****d2");
-        System.out.println(format.format(d2));
-        System.out.println("*****d3");
-        System.out.println(format.format(d3));
-        System.out.println("*****d1");
-        System.out.println(format.format(d4));
+        //System.out.println(format.format(new Date()));
+        //System.out.println("*****d0");
+        //System.out.println(format.format(d0));
+        //System.out.println("*****d1");
+        //System.out.println(format.format(d1));
+        //System.out.println("*****d2");
+        //System.out.println(format.format(d2));
+        //System.out.println("*****d3");
+        //System.out.println(format.format(d3));
+        //System.out.println("*****d1");
+        //System.out.println(format.format(d4));
     }
 
     /**
@@ -222,7 +221,7 @@ public class DateDaylightSavingTest {
         axis.setTickMarkPosition(DateTickMarkPosition.END);
         List<? extends Tick> ticks = axis.refreshTicks(g2, new AxisState(), area,
                 RectangleEdge.BOTTOM);
-        System.out.println("**result ticks: " + ticks);
+        //System.out.println("**result ticks: " + ticks);
     }
 
 

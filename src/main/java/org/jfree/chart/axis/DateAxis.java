@@ -53,7 +53,9 @@ import java.awt.geom.Rectangle2D;
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -859,10 +861,10 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
            // System.out.println("***line 849 cal: " + calendar.getTime() );
             Date d0 = calendar.getTime();
             if (d0.getTime() >= date.getTime()) {
-                ZoneId z = this.timeZone.toZoneId() ;
-
                 calendar.set(Calendar.MINUTE, value - count);
+                System.out.println("***d0");
                 d0 = calendar.getTime();
+                d0 = convertToZoneId(d0);
             }
             return d0;
         }
@@ -887,8 +889,11 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
          //   System.out.println("**calendar getWeekYear: " + calendar.getWeekYear() + " time : " + calendar.getTime());
             Date d1 = calendar.getTime();
             if (d1.getTime() >= date.getTime()) {
+                convertToZoneId(d1);
                 calendar.set(Calendar.HOUR_OF_DAY, value - count);
+                System.out.println("***d1");
                 d1 = calendar.getTime();
+                d1 = convertToZoneId(d1);
 
                 //ZonedDateTime.ofInstant()
                 //ZonedDateTime a = ZonedDateTime.of(years, months, days, value, minutes, seconds);
@@ -914,8 +919,11 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
                 // won't work with JDK 1.3
             Date d2 = calendar.getTime();
             if (d2.getTime() >= date.getTime()) {
+
                 calendar.set(Calendar.DATE, value - count);
+                System.out.println("***d2");
                 d2 = calendar.getTime();
+                d2 = convertToZoneId(d2);
             }
             return d2;
         }
@@ -965,6 +973,18 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
             return d3;
         }
         return null;
+    }
+
+    private Date convertToZoneId(Date d0){
+        System.out.println("***974 date : " + d0);
+        ZoneId zoneId = this.timeZone.toZoneId() ;
+        Instant pointInTime = d0.toInstant();
+        System.out.println("***pointInTime: " + pointInTime);
+        ZonedDateTime convertedDateTime = pointInTime.atOffset(ZoneOffset.UTC)
+                .atZoneSimilarLocal(this.timeZone.toZoneId())
+                .withZoneSameInstant(ZoneOffset.UTC);
+        System.out.println("***hereee->: " +  Date.from(convertedDateTime.toInstant()));
+        return Date.from(convertedDateTime.toInstant());
     }
 
     /**
