@@ -105,21 +105,22 @@ public class DateDaylightSavingTest {
     }
 
     @Test
-    public void testPreviousStandardDateMonthB() {
-        MyDateAxis axis = new MyDateAxis("Month");
-        Month nov2006 = new Month(11, 2006);
-        Month dec2006 = new Month(12, 2006);
+    public void testIssue206() {
+        Day startD1 = new Day(7, 11, 2021);
+    }
 
-        // five dates to check...
-        Date d0 = new Date(nov2006.getFirstMillisecond());
-        Date d1 = new Date(nov2006.getFirstMillisecond() + 500L);
-        Date d2 = new Date(nov2006.getMiddleMillisecond());
-        Date d3 = new Date(nov2006.getMiddleMillisecond() + 500L);
-        Date d4 = new Date(nov2006.getLastMillisecond());
+    @Test
+    public void testPreviousStandardDateHourA() {
+        System.out.println("**testPreviousStandardDateHourA");
+        DateAxisTest.MyDateAxis axis = new DateAxisTest.MyDateAxis("Hour");
+        //Hour h0 = new Hour(12, 1, 4, 2007);
+        Hour h0 = new Hour(12,7, 11, 2021);
+        Hour h1 = new Hour(13, 7, 11, 2021);
+        Date d0 = new Date(h0.getFirstMillisecond());
+        Date end = new Date(h1.getLastMillisecond());
 
-        Date end = new Date(dec2006.getLastMillisecond());
-
-        DateTickUnit unit = new DateTickUnit(DateTickUnitType.MONTH, 3);
+        System.out.println("**testPreviousStandardDateHourA end: " + end);
+        DateTickUnit unit = new DateTickUnit(DateTickUnitType.HOUR, 1);
         axis.setTickUnit(unit);
 
         // START: check d0 and d1
@@ -128,50 +129,9 @@ public class DateDaylightSavingTest {
         axis.setRange(d0, end);
         Date psd = axis.previousStandardDate(d0, unit);
         Date nsd = unit.addToDate(psd, TimeZone.getDefault());
+        System.out.println("**nsd: " + nsd);
         assertTrue(psd.getTime() < d0.getTime());
         assertTrue(nsd.getTime() >= d0.getTime());
-
-        axis.setRange(d1, end);
-        psd = axis.previousStandardDate(d1, unit);
-        nsd = unit.addToDate(psd, TimeZone.getDefault());
-        assertTrue(psd.getTime() < d1.getTime());
-        assertTrue(nsd.getTime() >= d1.getTime());
-
-        // MIDDLE: check d1, d2 and d3
-        axis.setTickMarkPosition(DateTickMarkPosition.MIDDLE);
-
-        axis.setRange(d1, end);
-        psd = axis.previousStandardDate(d1, unit);
-        nsd = unit.addToDate(psd, TimeZone.getDefault());
-        assertTrue(psd.getTime() < d1.getTime());
-        assertTrue(nsd.getTime() >= d1.getTime());
-
-        axis.setRange(d2, end);
-        psd = axis.previousStandardDate(d2, unit);
-        nsd = unit.addToDate(psd, TimeZone.getDefault());
-        assertTrue(psd.getTime() < d2.getTime());
-        assertTrue(nsd.getTime() >= d2.getTime());
-
-        axis.setRange(d3, end);
-        psd = axis.previousStandardDate(d3, unit);
-        nsd = unit.addToDate(psd, TimeZone.getDefault());
-        assertTrue(psd.getTime() < d3.getTime());
-        assertTrue(nsd.getTime() >= d3.getTime());
-
-        // END: check d3 and d4
-        axis.setTickMarkPosition(DateTickMarkPosition.END);
-
-        axis.setRange(d3, end);
-        psd = axis.previousStandardDate(d3, unit);
-        nsd = unit.addToDate(psd, TimeZone.getDefault());
-        assertTrue(psd.getTime() < d3.getTime());
-        assertTrue(nsd.getTime() >= d3.getTime());
-
-        axis.setRange(d4, end);
-        psd = axis.previousStandardDate(d4, unit);
-        nsd = unit.addToDate(psd, TimeZone.getDefault());
-        assertTrue(psd.getTime() < d4.getTime());
-        assertTrue(nsd.getTime() >= d4.getTime());
     }
 
     /**
@@ -217,32 +177,29 @@ public class DateDaylightSavingTest {
         assertEquals("31-May-2008", t3.getText());
     }
 
-    /**
-     * A test for bug 3484403 (SourceForge
-     * https://sourceforge.net/p/jfreechart/bugs/1078/).
-     */
-    @Test
-    public void testBug3484403() {
+/*
+    Hour h1 = new Hour(13, 7, 11, 2021);
+        // five dates to check...
+        Date d0 = new Date(h0.getFirstMillisecond());
+        Date d1 = new Date(h0.getFirstMillisecond() + 500L);
+        Date d2 = new Date(h0.getMiddleMillisecond());
+        Date d3 = new Date(h0.getMiddleMillisecond() + 500L);
+        Date d4 = new Date(h0.getLastMillisecond());
+        System.out.println("**d4: " + d4);
+        Date end = new Date(h1.getLastMillisecond());
+        System.out.println("**testPreviousStandardDateHourA end: " + end);
 
-        final long[] dates =
-                { 1304892000000L, 1304632800000L, 1304546400000L, 1304460000000L,
-                        1304373600000L, 1304287200000L, 1320015600000L, 1309384800000L,
-                        1319752800000L, 1319666400000L, 1319580000000L, 1319493600000L };
-        Arrays.sort(dates);
+        DateTickUnit unit = new DateTickUnit(DateTickUnitType.HOUR, 1);
+        axis.setTickUnit(unit);
 
-        DateAxis axis = new DateAxis("Date");
-        // set start and end date
-        Date start = new Date(dates[0]);
-        Date end = new Date(dates[dates.length-1]);
-        axis.setMinimumDate(start);
-        axis.setMaximumDate(end);
+        // START: check d0 and d1
+        axis.setTickMarkPosition(DateTickMarkPosition.START);
 
-        BufferedImage image = new BufferedImage(200, 100,
-                BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g2 = image.createGraphics();
-        Rectangle2D area = new Rectangle2D.Double(0.0, 0.0, 500, 200);
-
-        // if the bug is still present, this leads to an endless loop
-        axis.refreshTicks(g2, new AxisState(), area, RectangleEdge.BOTTOM);
-    }
+        axis.setRange(d0, end);
+        Date psd = axis.previousStandardDate(d0, unit);
+        Date nsd = unit.addToDate(psd, TimeZone.getDefault());
+        System.out.println("**nsd: " + nsd);
+        assertTrue(psd.getTime() < d0.getTime());
+        assertTrue(nsd.getTime() >= d0.getTime());
+ */
 }

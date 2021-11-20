@@ -846,6 +846,7 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
             }
             calendar.clear(Calendar.MILLISECOND);
             calendar.set(years, months, days, hours, value, seconds);
+            System.out.println("***line 849 cal: " + calendar.getTime() );
             Date d0 = calendar.getTime();
             if (d0.getTime() >= date.getTime()) {
                 calendar.set(Calendar.MINUTE, value - count);
@@ -893,6 +894,7 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
             }
             calendar.clear(Calendar.MILLISECOND);
             calendar.set(years, months, value, hours, 0, 0);
+            System.out.println("***line 897 cal: " + calendar.getTime() );
             // long result = calendar.getTimeInMillis();
                 // won't work with JDK 1.3
             Date d2 = calendar.getTime();
@@ -907,6 +909,7 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
             years = calendar.get(Calendar.YEAR);
             calendar.clear(Calendar.MILLISECOND);
             calendar.set(years, value, 1, 0, 0, 0);
+            System.out.println("***line 912 cal: " + calendar.getTime() );
             Month month = new Month(calendar.getTime(), this.timeZone,
                     this.locale);
             Date standardDate = calculateDateForPosition(
