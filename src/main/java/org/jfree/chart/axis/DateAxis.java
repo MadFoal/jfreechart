@@ -775,7 +775,7 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
      * @return The previous "standard" date.
      */
     protected Date previousStandardDate(Date date, DateTickUnit unit) {
-
+        System.out.println("**previousStandardDate(): " +date);
         int milliseconds;
         int seconds;
         int minutes;
@@ -871,6 +871,7 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
             }
             calendar.clear(Calendar.MILLISECOND);
             calendar.set(years, months, days, value, minutes, seconds);
+            System.out.println("**calendar getWeekYear: " + calendar.getWeekYear() + " time : " + calendar.getTime());
             Date d1 = calendar.getTime();
             if (d1.getTime() >= date.getTime()) {
                 calendar.set(Calendar.HOUR_OF_DAY, value - count);
@@ -984,6 +985,7 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
      * @return The next "standard" date.
      */
     protected Date nextStandardDate(Date date, DateTickUnit unit) {
+        System.out.println("**nextStandardDate");
         Date previous = previousStandardDate(date, unit);
         Calendar calendar = Calendar.getInstance(this.timeZone, this.locale);
         calendar.setTime(previous);
