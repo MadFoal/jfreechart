@@ -53,10 +53,8 @@ import java.awt.geom.Rectangle2D;
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -862,7 +860,7 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
             Date d0 = calendar.getTime();
             if (d0.getTime() >= date.getTime()) {
                 calendar.set(Calendar.MINUTE, value - count);
-                System.out.println("***d0");
+                System.out.println("***---------Minutes");
                 d0 = calendar.getTime();
                 d0 = convertToZoneId(d0);
             }
@@ -889,9 +887,8 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
          //   System.out.println("**calendar getWeekYear: " + calendar.getWeekYear() + " time : " + calendar.getTime());
             Date d1 = calendar.getTime();
             if (d1.getTime() >= date.getTime()) {
-                convertToZoneId(d1);
                 calendar.set(Calendar.HOUR_OF_DAY, value - count);
-                System.out.println("***d1");
+                System.out.println("***---------HOUR_OF_DAY");
                 d1 = calendar.getTime();
                 d1 = convertToZoneId(d1);
 
@@ -923,6 +920,7 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
                 calendar.set(Calendar.DATE, value - count);
                 System.out.println("***d2");
                 d2 = calendar.getTime();
+                System.out.println("***---------date");
                 d2 = convertToZoneId(d2);
             }
             return d2;
@@ -976,14 +974,25 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
     }
 
     private Date convertToZoneId(Date d0){
-        System.out.println("***974 date : " + d0);
+        System.out.println("******convertToZoneId arg : " + d0 + " *****************");
         ZoneId zoneId = this.timeZone.toZoneId() ;
+        //ZoneOffset zoneOffset = ZoneOffset.
+
         Instant pointInTime = d0.toInstant();
-        System.out.println("***pointInTime: " + pointInTime);
-        ZonedDateTime convertedDateTime = pointInTime.atOffset(ZoneOffset.UTC)
-                .atZoneSimilarLocal(this.timeZone.toZoneId())
-                .withZoneSameInstant(ZoneOffset.UTC);
-        System.out.println("***hereee->: " +  Date.from(convertedDateTime.toInstant()));
+
+         DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
+        LocalDateTime ldt = LocalDateTime.ofInstant(pointInTime, zoneId);
+        System.out.println("***ldt ldt: " + ldt.format(formatter));
+        ZoneOffset offset =  zoneId.getRules().getOffset(pointInTime);
+
+        //System.out.println("***pointInTime: " + pointInTime);
+        OffsetDateTime off  = pointInTime.atOffset(offset);
+       // System.out.println("***off: " + off);
+        ZonedDateTime x = off.atZoneSimilarLocal(this.timeZone.toZoneId());
+     //   System.out.println("***x: " + x);
+        ZonedDateTime convertedDateTime = x.withZoneSameInstant(offset);
+    //    System.out.println("***convertedDateTime: " + convertedDateTime);
+        System.out.println("***returning: " +  Date.from(convertedDateTime.toInstant()));
         return Date.from(convertedDateTime.toInstant());
     }
 
@@ -1048,6 +1057,7 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
      * @return A collection of standard date tick units.
      */
     public static TickUnitSource createStandardDateTickUnits() {
+
         return createStandardDateTickUnits(TimeZone.getDefault(),
                 Locale.getDefault());
     }
@@ -1067,10 +1077,12 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
     public static TickUnitSource createStandardDateTickUnits(TimeZone zone,
             Locale locale) {
 
+
         Args.nullNotPermitted(zone, "zone");
         Args.nullNotPermitted(locale, "locale");
         TickUnits units = new TickUnits();
 
+        ZoneId zoneId = zone.getDefault().toZoneId();
         // date formatters
         DateFormat f1 = new SimpleDateFormat("HH:mm:ss.SSS", locale);
         DateFormat f2 = new SimpleDateFormat("HH:mm:ss", locale);
