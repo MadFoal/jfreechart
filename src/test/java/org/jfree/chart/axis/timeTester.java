@@ -2,62 +2,54 @@ package org.jfree.chart.axis;
 
 import org.jfree.data.time.Hour;
 import org.junit.jupiter.api.Test;
-
 import java.util.Date;
-import java.util.TimeZone;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class timeTester {
 
     /**
-     * Check that setting a tool tip generator for a series does override the
-     * default generator.
+     * Correct time is returned regardless of daylight saving time changes
      */
     @Test
-    public void giveDaylightSavingDateAt1AM2020_expectedCorrectTime1HourBefore() {
-        DateAxisTest.MyDateAxis axis = new DateAxisTest.MyDateAxis("Hour");
-        Hour dstSwitch2020 = new Hour(3,12, 12, 2020);
-        DateTickUnit unit = new DateTickUnit(DateTickUnitType.HOUR, 1);
-        axis.setTickUnit(unit);
-        axis.setTickMarkPosition(DateTickMarkPosition.START);
+    public void giveDaylightSavingSwitchDateAt1AM2020_expectedCorrectTime1HourBefore() {
+        Hour dstSwitch2020 = new Hour(1,1, 11, 2020);
         long timeDifference = getOneHourDifferenceInMilliseconds(dstSwitch2020);
 
         assertTrue(timeDifference == 3600000);
     }
 
     /**
-     * Check that setting a tool tip generator for a series does override the
-     * default generator.
+     * Correct time is returned regardless of daylight saving time changes
      */
     @Test
-    public void giveDaylightSavingDateAt1AM2021_expectedCorrectTime1HourBefore() {
+    public void giveDaylightSavingSwitchDateAt1AM2021_expectedCorrectTime1HourBefore() {
         Hour dstSwitch2021 = new Hour(1, 7, 11, 2021);
-        DateAxisTest.MyDateAxis axis = new DateAxisTest.MyDateAxis("Hour");
-        DateTickUnit unit = new DateTickUnit(DateTickUnitType.HOUR, 1);
-        axis.setTickUnit(unit);
-        axis.setTickMarkPosition(DateTickMarkPosition.START);
         long timeDifference = getOneHourDifferenceInMilliseconds(dstSwitch2021);
 
         assertTrue(timeDifference == 3600000);
     }
 
     /**
-     * Check that setting a tool tip generator for a series does override the
-     * default generator.
+     * Correct time is returned regardless of daylight saving time changes
      */
     @Test
     public void giveStandardDateAt1Am_expectedCorrectTime1HourBefore() {
-        Hour dstSwitch2021 = new Hour(1, 7, 1, 2020);
-        DateAxisTest.MyDateAxis axis = new DateAxisTest.MyDateAxis("Hour");
-        DateTickUnit unit = new DateTickUnit(DateTickUnitType.HOUR, 1);
-        axis.setTickUnit(unit);
-        // START: check d0 and d1
+        Hour standardTime = new Hour(1, 7, 12, 2018);
+        long timeDifference = getOneHourDifferenceInMilliseconds(standardTime);
 
-        axis.setTickMarkPosition(DateTickMarkPosition.START);
-        getOneHourDifferenceInMilliseconds(dstSwitch2020);
-        assertTrue(getOneHourDifferenceInMilliseconds(dstSwitch2020) == 3600000);
-        //  assertTrue(tt2 == tt);
+        assertTrue(timeDifference == 3600000);
+    }
+
+    /**
+     * Correct time is returned regardless of daylight saving time changes
+     */
+    @Test
+    public void giveDaylightSavingDateAt1AM_expectedCorrectTime1HourBefore() {
+        Hour daylightDate = new Hour(1, 18, 6, 2019);
+        long timeDifference = getOneHourDifferenceInMilliseconds(daylightDate);
+
+        assertTrue(timeDifference == 3600000);
     }
 
     private long getOneHourDifferenceInMilliseconds(Hour hour){
