@@ -6,7 +6,7 @@ import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class timeTester {
+public class DaylightSavingsToStandardTest {
 
     /**
      * Issue 206 https://github.com/jfree/jfreechart/issues/206
