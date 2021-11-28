@@ -8,8 +8,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class DaylightSavingsToStandardTest {
 
-    public DaylightSavingsToStandardTest() {}
-
     /**
      * Issue 206 https://github.com/jfree/jfreechart/issues/206
      * Details: Correct time is returned regardless of daylight saving time changes
@@ -24,7 +22,7 @@ public class DaylightSavingsToStandardTest {
         final Hour dstSwitch2020 = new Hour(1,1, 11, 2020);
         final long timeDifference = getOneHourDifferenceInMilliseconds(dstSwitch2020);
 
-        assertEquals(3_600_000, timeDifference);
+        assertEquals(3600000, timeDifference);
     }
 
     /**
@@ -41,7 +39,7 @@ public class DaylightSavingsToStandardTest {
         final Hour dstSwitch2021 = new Hour(1, 7, 11, 2021);
         final long timeDifference = getOneHourDifferenceInMilliseconds(dstSwitch2021);
 
-        assertEquals(3_600_000, timeDifference);
+        assertEquals(3600000, timeDifference);
     }
 
     /**
@@ -58,7 +56,7 @@ public class DaylightSavingsToStandardTest {
         final Hour standardTime = new Hour(1, 7, 12, 2018);
         final long timeDifference = getOneHourDifferenceInMilliseconds(standardTime);
 
-        assertEquals(3_600_000, timeDifference);
+        assertEquals(3600000, timeDifference);
     }
 
     /**
@@ -74,8 +72,7 @@ public class DaylightSavingsToStandardTest {
     public void giveDaylightSavingDateAt1AMExpectedCorrectTime1HourBefore() {
         final Hour daylightDate = new Hour(1, 18, 6, 2019);
         final long timeDifference = getOneHourDifferenceInMilliseconds(daylightDate);
-
-        assertEquals(3_600_000, timeDifference);
+        assertEquals(3600000, timeDifference);
     }
 
     /**
@@ -89,10 +86,7 @@ public class DaylightSavingsToStandardTest {
         axis.setTickUnit(unit);
         axis.setRange(testDate, end);
 
-        final Date previous = axis.previousStandardDate(testDate, unit);
-        final long previousTime = previous.getTime();
-        final long testDateTime = testDate.getTime();
-        final long timeDifferent = testDateTime - previousTime;
-        return timeDifferent;
+        Date previous = axis.previousStandardDate(testDate, unit);
+        return testDate.getTime() - previous.getTime();
     }
 }
