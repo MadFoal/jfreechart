@@ -82,14 +82,8 @@ public class DateDaylightSavingTest {
 
     @Test
     public boolean TimeZone_Demo() {
-        // Creating a time zone object
-        TimeZone timeobj
-                = TimeZone
-                .getTimeZone("Pacific/Pago_Pago");
+        TimeZone timeobj = TimeZone.getTimeZone("Pacific/Pago_Pago");
 
-        // Displaying the time zone - Verifying daylight
-        // Checking the value of day light
-        //System.out.println("The result is: "+ bool_daylight);
         return timeobj.observesDaylightTime();
     }
 
