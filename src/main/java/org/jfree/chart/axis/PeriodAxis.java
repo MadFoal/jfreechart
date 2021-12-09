@@ -262,6 +262,7 @@ public class PeriodAxis extends ValueAxis
      * @return The time zone (never {@code null}).
      */
     public TimeZone getTimeZone() {
+        System.out.println("***timezone: " + this.timeZone );
         return this.timeZone;
     }
 
